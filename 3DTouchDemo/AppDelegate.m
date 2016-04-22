@@ -5,7 +5,7 @@
 //  Created by 庞珂路 on 16/3/10.
 //  Copyright © 2016年 庞珂路. All rights reserved.
 //
-
+#define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 #import "AppDelegate.h"
 
 @interface AppDelegate ()
@@ -13,13 +13,29 @@
 @end
 
 @implementation AppDelegate
+{
+    NSString * title ;
+}
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
     return YES;
 }
-
+-(void)application:(UIApplication *)application performActionForShortcutItem:(UIApplicationShortcutItem *)shortcutItem completionHandler:(void (^)(BOOL))completionHandler
+{
+    UIColor *changeColor = nil;
+    NSDictionary *dic = shortcutItem.userInfo;
+    if (dic.count>0) {
+        int red = [dic[@"key1"] intValue];
+        int green = [dic[@"key2"] intValue];
+        int blue = [dic[@"key3"] intValue];
+        int alpha = [dic[@"key4"] intValue];
+        changeColor = RGBACOLOR(red, green, blue, alpha);
+    }
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:shortcutItem.localizedTitle message:shortcutItem.localizedSubtitle delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alert show];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"changeColor" object:changeColor];
+}
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
